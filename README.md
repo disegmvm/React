@@ -1,2 +1,2 @@
 # React
-React learn
+Курсовой проект

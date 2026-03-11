@@ -23,7 +23,7 @@ export const App = () => {
       </div>
 
       <ul>
-        <Restaurant restaurant={activeRestaurant} />
+        <Restaurant key={activeRestaurant.id} restaurant={activeRestaurant} />
       </ul>
     </Layout>
   );

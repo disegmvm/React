@@ -1,3 +1,5 @@
+import { Dish } from "./dish";
+
 export const Restaurant = ({ restaurant }) => {
   return (
     <li>
@@ -6,11 +8,7 @@ export const Restaurant = ({ restaurant }) => {
       <p>Меню:</p>
       <ul>
         {restaurant.menu.map((dish) => (
-          <li>
-            <p>Название: {dish.name}</p>
-            <p>Цена: {dish.price}</p>
-            <p>Ингредиенты: {dish.ingredients.join(", ")}</p>
-          </li>
+          <Dish dish={dish} />
         ))}
       </ul>
 

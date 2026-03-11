@@ -2,7 +2,7 @@ export const Layout = ({ children }) => {
   return (
     <div>
       <header>
-        <h1>Рестики</h1>
+        <h1>Рестораны</h1>
       </header>
 
       <main>{children}</main>

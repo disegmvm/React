@@ -23,7 +23,7 @@ export const Restaurant = ({ restaurant }) => {
           <p>Отзывы:</p>
           <ul>
             {restaurant.reviews.map((review) => (
-              <li key={review.id}>
+              <li>
                 <p>Пользователь: {review.user}</p>
                 <p>Отзыв: {review.text}</p>
                 <p>Оценка: {review.rating}</p>

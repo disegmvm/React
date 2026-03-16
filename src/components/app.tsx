@@ -1,16 +1,30 @@
+import { useState } from "react";
 import { restaurants } from "./constants/mock";
+import { Layout } from "./layout/layout";
 import { Restaurant } from "./restaurant";
 
 export const App = () => {
+  const [activeRestaurantId, setActiveRestaurantId] = useState(
+    restaurants[0].id,
+  );
+
+  const activeRestaurant = restaurants.find(
+    (restaurant) => restaurant.id === activeRestaurantId,
+  );
+
   return (
-    <div>
-      <h1>Рестораны</h1>
+    <Layout>
+      <div>
+        {restaurants.map((restaurant) => (
+          <button onClick={() => setActiveRestaurantId(restaurant.id)}>
+            Ресроран "{restaurant.name}"
+          </button>
+        ))}
+      </div>
 
       <ul>
-        {restaurants.map((restaurant) => (
-          <Restaurant restaurant={restaurant} />
-        ))}
+        <Restaurant key={activeRestaurant.id} restaurant={activeRestaurant} />
       </ul>
-    </div>
+    </Layout>
   );
 };

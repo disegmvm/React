@@ -1,17 +1,25 @@
 import { useState } from "react";
 
-export const Dish = ({ dish }) => {
-  const [count, setCount] = useState(0);
+const counter = (min = 0, max = 5, initialValue = 0) => {
+  const [count, setCount] = useState(initialValue);
+
   const increase = () => {
-    if (count < 5) {
+    if (count < max) {
       setCount(count + 1);
     }
   };
+
   const decrease = () => {
-    if (count > 0) {
+    if (count > min) {
       setCount(count - 1);
     }
   };
+
+  return { count, increase, decrease };
+};
+
+export const Dish = ({ dish }) => {
+  const { count, increase, decrease } = counter();
 
   return (
     <li>

@@ -1,0 +1,25 @@
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.tabButton {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  background-color: #e3e8ff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tabButton:hover {
+  background-color: #cfd8ff;
+}
+
+.activeTabButton {
+  background-color: #4f6df5;
+  color: white;
+  cursor: default;
+}

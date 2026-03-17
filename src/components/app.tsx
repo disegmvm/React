@@ -2,9 +2,11 @@ import { useState } from "react";
 import { restaurants } from "./constants/mock";
 import { Layout } from "./layout/layout";
 import { Restaurant } from "./restaurant";
+import { Tabs } from "./tabs";
+import styles from "./app.module.css";
 
 export const App = () => {
-  const [activeRestaurantId, setActiveRestaurantId] = useState(
+  const [activeRestaurantId, setActiveRestaurantId] = useState<string>(
     restaurants[0].id,
   );
 
@@ -12,19 +14,23 @@ export const App = () => {
     (restaurant) => restaurant.id === activeRestaurantId,
   );
 
+  if (!activeRestaurant) {
+    return <div>Ресторан не найден</div>;
+  }
+
   return (
     <Layout>
-      <div>
-        {restaurants.map((restaurant) => (
-          <button onClick={() => setActiveRestaurantId(restaurant.id)}>
-            Ресроран "{restaurant.name}"
-          </button>
-        ))}
-      </div>
+      <div className={styles.app}>
+        <Tabs
+          restaurants={restaurants}
+          activeRestaurantId={activeRestaurantId}
+          onChangeRestaurant={setActiveRestaurantId}
+        />
 
-      <ul>
-        <Restaurant key={activeRestaurant.id} restaurant={activeRestaurant} />
-      </ul>
+        <ul className={styles.restaurantList}>
+          <Restaurant key={activeRestaurant.id} restaurant={activeRestaurant} />
+        </ul>
+      </div>
     </Layout>
   );
 };

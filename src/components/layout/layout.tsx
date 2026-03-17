@@ -1,14 +1,24 @@
-export const Layout = ({ children }) => {
+import type { ReactNode } from "react";
+import { ScrollBar } from "../scrollBar";
+import styles from "./layout.module.css";
+
+type LayoutProps = {
+  children: ReactNode;
+};
+
+export const Layout = ({ children }: LayoutProps) => {
   return (
-    <div>
-      <header>
-        <h1>Рестораны</h1>
+    <div className={styles.layout}>
+      <ScrollBar />
+
+      <header className={styles.header}>
+        <h1 className={styles.title}>Рестораны</h1>
       </header>
 
-      <main>{children}</main>
+      <main className={styles.main}>{children}</main>
 
-      <footer>
-        <p>Домашка по react</p>
+      <footer className={styles.footer}>
+        <p>Домашка по React</p>
       </footer>
     </div>
   );

@@ -1,0 +1,27 @@
+.counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4f6df5;
+  color: white;
+  cursor: pointer;
+}
+
+.disabledButton {
+  background-color: #b9c3ff;
+  cursor: not-allowed;
+}
+
+.value {
+  min-width: 20px;
+  text-align: center;
+  font-weight: bold;
+}

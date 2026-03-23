@@ -1,0 +1,24 @@
+.layout {
+  min-height: 100vh;
+}
+
+.header {
+  padding: 32px 20px 20px;
+  background-color: white;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.title {
+  text-align: center;
+  margin: 0;
+}
+
+.main {
+  padding: 24px 20px 40px;
+}
+
+.footer {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+}

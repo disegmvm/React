@@ -1,0 +1,34 @@
+.form {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: white;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.field input,
+.field textarea {
+  padding: 10px 12px;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+}
+
+.field textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.clearButton {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  background-color: #ffdddd;
+  cursor: pointer;
+}

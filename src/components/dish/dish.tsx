@@ -1,6 +1,6 @@
-import { Counter } from "./counter";
-import { useCounter } from "./useCounter";
-import type { DishType } from "./types";
+import { Counter } from "../counter/counter";
+import { useCounter } from "../useCounter";
+import type { DishType } from "../types";
 import styles from "./dish.module.css";
 
 type DishProps = {

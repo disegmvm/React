@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { restaurants } from "./constants/mock";
-import { Layout } from "./layout/layout";
-import { Restaurant } from "./restaurant";
-import { Tabs } from "./tabs";
+import { restaurants } from "../constants/mock";
+import { Layout } from "../layout/layout";
+import { Restaurant } from "../restaurant/restaurant";
+import { Tabs } from "../tabs/tabs";
 import styles from "./app.module.css";
 
 export const App = () => {

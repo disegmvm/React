@@ -1,7 +1,7 @@
-import { Dish } from "./dish";
-import { Review } from "./review";
-import { ReviewForm } from "./reviewForm";
-import type { RestaurantType } from "./types";
+import { Dish } from "../dish/dish";
+import { Review } from "../review/review";
+import { ReviewForm } from "../reviewForm/reviewForm";
+import type { RestaurantType } from "../types";
 import styles from "./restaurant.module.css";
 
 type RestaurantProps = {

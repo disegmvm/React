@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ScrollBar } from "../scrollBar";
+import { ScrollBar } from "../scrollBar/scrollBar";
 import styles from "./layout.module.css";
 
 type LayoutProps = {

@@ -1,9 +1,9 @@
 .form {
   margin-top: 20px;
   padding: 16px;
-  background-color: white;
+  background-color: var(--form-bg);
   border-radius: 12px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--surface-border);
 }
 
 .field {
@@ -16,8 +16,10 @@
 .field input,
 .field textarea {
   padding: 10px 12px;
-  border: 1px solid #d8d8d8;
+  border: 1px solid var(--surface-border);
   border-radius: 8px;
+  background-color: var(--surface-bg);
+  color: var(--text-color);
 }
 
 .field textarea {
@@ -29,6 +31,7 @@
   border: none;
   border-radius: 8px;
   padding: 10px 14px;
-  background-color: #ffdddd;
+  background-color: var(--button-bg);
+  color: var(--button-text);
   cursor: pointer;
 }

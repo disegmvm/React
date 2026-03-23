@@ -1,6 +1,6 @@
 .dish {
   padding: 12px;
   border-radius: 10px;
-  background-color: #f3f5ff;
+  background-color: var(--dish-bg);
   margin-bottom: 10px;
 }

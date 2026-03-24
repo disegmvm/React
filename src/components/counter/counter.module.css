@@ -10,13 +10,14 @@
   height: 32px;
   border: none;
   border-radius: 8px;
-  background-color: #4f6df5;
-  color: white;
+  background-color: var(--button-active-bg);
+  color: var(--button-active-text);
   cursor: pointer;
 }
 
 .disabledButton {
-  background-color: #b9c3ff;
+  background-color: var(--button-disabled-bg);
+  color: var(--button-disabled-text);
   cursor: not-allowed;
 }
 

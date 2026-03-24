@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import type { RestaurantType } from "./types";
+import type { RestaurantType } from "../types";
 import styles from "./tabs.module.css";
 
 type TabsProps = {

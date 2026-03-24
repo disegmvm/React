@@ -1,33 +1,40 @@
 import { useReducer } from "react";
-import { Counter } from "./counter";
+import { Counter } from "../counter/counter";
 import styles from "./reviewForm.module.css";
+import { useUser } from "../userContext/userContext";
 
-const INITIAL_STATE = {
-  name: "",
-  text: "",
-  rating: 1,
-};
-
-type State = {
+type ReviewFormState = {
   name: string;
   text: string;
   rating: number;
 };
 
-type Action = { type: "setName"; payload: string } | { type: "addComment"; payload: string } | { type: "increaseRating" } | { type: "decreaseRating" } | { type: "clear" };
+type ReviewFormAction = {
+  type: string;
+  payload?: string;
+};
 
-const reviewFormReducer = (state: State, action: Action): State => {
+const INITIAL_STATE: ReviewFormState = {
+  name: "",
+  text: "",
+  rating: 1,
+};
+
+const reviewFormReducer = (
+  state: ReviewFormState,
+  action: ReviewFormAction,
+): ReviewFormState => {
   switch (action.type) {
     case "setName":
       return {
         ...state,
-        name: action.payload,
+        name: action.payload || "",
       };
 
     case "addComment":
       return {
         ...state,
-        text: action.payload,
+        text: action.payload || "",
       };
 
     case "increaseRating":
@@ -52,6 +59,11 @@ const reviewFormReducer = (state: State, action: Action): State => {
 
 export const ReviewForm = () => {
   const [state, dispatch] = useReducer(reviewFormReducer, INITIAL_STATE);
+  const { isAuthorized } = useUser();
+
+  if (!isAuthorized) {
+    return null;
+  }
 
   return (
     <form className={styles.form}>

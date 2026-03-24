@@ -1,6 +1,6 @@
 .review {
   padding: 12px;
   border-radius: 10px;
-  background-color: #fff7ea;
+  background-color: var(--review-bg);
   margin-bottom: 10px;
 }

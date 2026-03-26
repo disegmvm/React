@@ -1,4 +1,4 @@
-import type { RestaurantType } from "../types";
+import type { RestaurantType } from "../components/types";
 
 export const restaurants: RestaurantType[] = [
   {

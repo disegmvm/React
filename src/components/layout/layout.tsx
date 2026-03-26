@@ -1,15 +1,11 @@
 import classNames from "classnames";
-import type { ReactNode } from "react";
+import type { PropsWithChildren } from "react";
 import { ScrollBar } from "../scrollBar/scrollBar";
 import { useTheme } from "../themeContext/themeContext";
 import { useUser } from "../userContext/userContext";
 import styles from "./layout.module.css";
 
-type LayoutProps = {
-  children: ReactNode;
-};
-
-export const Layout = ({ children }: LayoutProps) => {
+export const Layout = ({ children }: PropsWithChildren) => {
   const { theme, toggleTheme } = useTheme();
   const { userName, isAuthorized, login, logout } = useUser();
 

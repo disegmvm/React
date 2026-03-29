@@ -1,7 +1,10 @@
-import { useState } from "react";
-import { createRoot } from "react-dom/client";
+import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
-import { restaurants } from "../../constants/mock";
+import { useAppSelector } from "../../redux/hooks";
+import {
+  selectRestaurantById,
+  selectRestaurants,
+} from "../../redux/selectors";
 import { store } from "../../redux/store";
 import { Layout } from "../layout/layout";
 import { Restaurant } from "../restaurant/restaurant";
@@ -9,18 +12,19 @@ import { Tabs } from "../tabs/tabs";
 import { ThemeProvider } from "../themeContext/themeContext";
 import { UserProvider } from "../userContext/userContext";
 import styles from "./app.module.css";
-import "../../index.css";
-
-const root = document.getElementById("root");
 
 const AppView = () => {
-  const [activeRestaurantId, setActiveRestaurantId] = useState<string>(
-    restaurants[0].id,
+  const restaurants = useAppSelector(selectRestaurants);
+  const [activeRestaurantId, setActiveRestaurantId] = useState("");
+  const activeRestaurant = useAppSelector((state) =>
+    selectRestaurantById(state, activeRestaurantId),
   );
 
-  const activeRestaurant = restaurants.find(
-    (restaurant) => restaurant.id === activeRestaurantId,
-  );
+  useEffect(() => {
+    if (!activeRestaurantId && restaurants.length > 0) {
+      setActiveRestaurantId(restaurants[0].id);
+    }
+  }, [activeRestaurantId, restaurants]);
 
   if (!activeRestaurant) {
     return <div>Ресторан не найден</div>;
@@ -51,7 +55,3 @@ export const App = () => (
     </ThemeProvider>
   </Provider>
 );
-
-if (root) {
-  createRoot(root).render(<App />);
-}

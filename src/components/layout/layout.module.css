@@ -86,8 +86,25 @@
   padding: 24px 20px 40px;
 }
 
+.content {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.pageContent {
+  flex: 1;
+  min-width: 0;
+}
+
 .footer {
   padding: 20px;
   text-align: center;
   color: var(--text-color);
+}
+
+@media (max-width: 900px) {
+  .content {
+    flex-direction: column;
+  }
 }

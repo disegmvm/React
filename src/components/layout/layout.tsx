@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import type { PropsWithChildren } from "react";
+import { Cart } from "../cart/cart";
 import { ScrollBar } from "../scrollBar/scrollBar";
 import { useTheme } from "../themeContext/themeContext";
 import { useUser } from "../userContext/userContext";
@@ -54,7 +55,12 @@ export const Layout = ({ children }: PropsWithChildren) => {
         </div>
       </header>
 
-      <main className={styles.main}>{children}</main>
+      <main className={styles.main}>
+        <div className={styles.content}>
+          <div className={styles.pageContent}>{children}</div>
+          <Cart />
+        </div>
+      </main>
 
       <footer className={styles.footer}>
         <p>Домашка по React</p>

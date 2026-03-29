@@ -1,16 +1,19 @@
 import { Counter } from "../counter/counter";
-import { useCounter } from "../useCounter";
 import type { DishType } from "../types";
 import styles from "./dish.module.css";
 import { useUser } from "../userContext/userContext";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { decrementItem, incrementItem } from "../../redux/slices/cartSlice";
+import { selectDishCountById } from "../../redux/selectors";
 
 type DishProps = {
   dish: DishType;
 };
 
 export const Dish = ({ dish }: DishProps) => {
-  const { count, increase, decrease } = useCounter(0, 5, 0);
   const { isAuthorized } = useUser();
+  const dispatch = useAppDispatch();
+  const count = useAppSelector((state) => selectDishCountById(state, dish.id));
 
   return (
     <li className={styles.dish}>
@@ -26,8 +29,8 @@ export const Dish = ({ dish }: DishProps) => {
       {isAuthorized ? (
         <Counter
           value={count}
-          onIncrease={increase}
-          onDecrease={decrease}
+          onIncrease={() => dispatch(incrementItem(dish.id))}
+          onDecrease={() => dispatch(decrementItem(dish.id))}
           minValue={0}
           maxValue={5}
         />

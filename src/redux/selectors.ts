@@ -1,152 +1,128 @@
 import { createSelector } from "@reduxjs/toolkit";
-import type { DishType, RestaurantType, ReviewType } from "../components/types";
+import type { ReviewType } from "../components/types";
 import type { RootState } from "./store";
+import { dishesSelectors } from "./slices/dishesSlice";
+import { restaurantsSelectors } from "./slices/restaurantsSlice";
 
 const selectCartState = (state: RootState) => state.cart;
-const selectRestaurantState = (state: RootState) => state.restaurants;
-const selectDishState = (state: RootState) => state.dishes;
-const selectReviewState = (state: RootState) => state.reviews;
-const selectUserState = (state: RootState) => state.users;
+const selectDishesState = (state: RootState) => state.dishes;
+const selectReviewsState = (state: RootState) => state.reviews;
+const selectUsersState = (state: RootState) => state.users;
 const selectRestaurantId = (_state: RootState, restaurantId: string) =>
   restaurantId;
 const selectDishId = (_state: RootState, dishId: string) => dishId;
 
-const getReviewView = (
-  reviewId: string,
-  state: Pick<RootState, "reviews" | "users">,
-): ReviewType | null => {
-  const review = state.reviews.entities[reviewId];
-
-  if (!review) {
-    return null;
-  }
-
-  return {
-    id: review.id,
-    user: state.users.entities[review.userId]?.name ?? "Unknown user",
-    text: review.text,
-    rating: review.rating,
-  };
-};
-
-const getDishView = (
-  dishId: string,
-  state: Pick<RootState, "dishes">,
-): DishType | null => {
-  const dish = state.dishes.entities[dishId];
-
-  if (!dish) {
-    return null;
-  }
-
-  return {
-    id: dish.id,
-    name: dish.name,
-    price: dish.price,
-    ingredients: dish.ingredients,
-  };
-};
-
-const getRestaurantView = (
-  restaurantId: string,
-  state: Pick<RootState, "restaurants" | "dishes" | "reviews" | "users">,
-): RestaurantType | null => {
-  const restaurant = state.restaurants.entities[restaurantId];
-
-  if (!restaurant) {
-    return null;
-  }
-
-  return {
-    id: restaurant.id,
-    name: restaurant.name,
-    menu: restaurant.menuIds
-      .map((dishId: string) => getDishView(dishId, state))
-      .filter((dish): dish is DishType => dish !== null),
-    reviews: restaurant.reviewIds
-      .map((reviewId: string) => getReviewView(reviewId, state))
-      .filter((review): review is ReviewType => review !== null),
-  };
-};
-
-export const selectRestaurants = createSelector(
-  [
-    selectRestaurantState,
-    selectDishState,
-    selectReviewState,
-    selectUserState,
-  ],
-  (restaurantsState, dishesState, reviewsState, usersState) =>
-    restaurantsState.ids
-      .map((restaurantId) =>
-        getRestaurantView(restaurantId, {
-          restaurants: restaurantsState,
-          dishes: dishesState,
-          reviews: reviewsState,
-          users: usersState,
-        }),
-      )
-      .filter((restaurant): restaurant is RestaurantType => restaurant !== null),
-);
-
 export const selectRestaurantTabs = createSelector(
-  [selectRestaurantState],
-  (restaurantsState) =>
-    restaurantsState.ids
-      .map((restaurantId) => restaurantsState.entities[restaurantId])
-      .filter(
-        (
-          restaurant,
-        ): restaurant is {
-          id: string;
-          name: string;
-          menuIds: string[];
-          reviewIds: string[];
-        } => restaurant !== undefined,
-      )
-      .map((restaurant) => ({
-        id: restaurant.id,
-        name: restaurant.name,
-      })),
+  [restaurantsSelectors.selectAll],
+  (restaurants) => restaurants.map(({ id, name }) => ({ id, name })),
 );
 
-export const selectRestaurantById = createSelector(
-  [
-    selectRestaurantState,
-    selectDishState,
-    selectReviewState,
-    selectUserState,
-    selectRestaurantId,
-  ],
-  (
-    restaurantsState,
-    dishesState,
-    reviewsState,
-    usersState,
-    restaurantId,
-  ) =>
-    getRestaurantView(restaurantId, {
-      restaurants: restaurantsState,
-      dishes: dishesState,
-      reviews: reviewsState,
-      users: usersState,
-    }),
+export const selectRestaurantsListStatus = (state: RootState) =>
+  state.restaurants.listStatus;
+
+export const selectRestaurantsListError = (state: RootState) =>
+  state.restaurants.listError;
+
+export const selectRestaurantById = (state: RootState, restaurantId: string) =>
+  restaurantsSelectors.selectById(state, restaurantId) ?? null;
+
+export const selectRestaurantRequestStatus = (
+  state: RootState,
+  restaurantId: string,
+) => state.restaurants.itemStatusById[restaurantId] ?? "idle";
+
+export const selectRestaurantRequestError = (
+  state: RootState,
+  restaurantId: string,
+) => state.restaurants.itemErrorById[restaurantId] ?? null;
+
+export const selectDishesByRestaurantId = createSelector(
+  [selectDishesState, selectRestaurantId],
+  (dishesState, restaurantId) => {
+    const dishIds = dishesState.byRestaurantId[restaurantId]?.ids ?? [];
+
+    return dishIds
+      .map((dishId) => dishesState.entities[dishId])
+      .filter((dish) => dish !== undefined);
+  },
 );
+
+export const selectDishesRequestStatus = (
+  state: RootState,
+  restaurantId: string,
+) => state.dishes.byRestaurantId[restaurantId]?.status ?? "idle";
+
+export const selectDishesRequestError = (
+  state: RootState,
+  restaurantId: string,
+) => state.dishes.byRestaurantId[restaurantId]?.error ?? null;
 
 export const selectDishById = createSelector(
-  [selectDishState, selectDishId],
-  (dishesState, dishId) => getDishView(dishId, { dishes: dishesState }),
+  [selectDishId, dishesSelectors.selectEntities],
+  (dishId, dishEntities) => dishEntities[dishId] ?? null,
 );
+
+export const selectDishRequestStatus = (state: RootState, dishId: string) =>
+  state.dishes.itemStatusById[dishId] ?? "idle";
+
+export const selectDishRequestError = (state: RootState, dishId: string) =>
+  state.dishes.itemErrorById[dishId] ?? null;
+
+export const selectReviewsByRestaurantId = createSelector(
+  [selectReviewsState, selectUsersState, selectRestaurantId],
+  (reviewsState, usersState, restaurantId) => {
+    const reviewIds = reviewsState.byRestaurantId[restaurantId]?.ids ?? [];
+
+    return reviewIds
+      .map((reviewId) => {
+        const review = reviewsState.entities[reviewId];
+
+        if (!review) {
+          return null;
+        }
+
+        const user = usersState.entities[review.userId];
+
+        const result: ReviewType = {
+          ...review,
+          user: user?.name ?? "Unknown user",
+        };
+
+        return result;
+      })
+      .filter((review): review is ReviewType => review !== null);
+  },
+);
+
+export const selectReviewsRequestStatus = (
+  state: RootState,
+  restaurantId: string,
+) => state.reviews.byRestaurantId[restaurantId]?.status ?? "idle";
+
+export const selectReviewsRequestError = (
+  state: RootState,
+  restaurantId: string,
+) => state.reviews.byRestaurantId[restaurantId]?.error ?? null;
+
+export const selectReviewMutationStatus = (state: RootState) =>
+  state.reviews.mutationStatus;
+
+export const selectReviewMutationError = (state: RootState) =>
+  state.reviews.mutationError;
+
+export const selectUsersStatus = (state: RootState) => state.users.status;
+
+export const selectUsersError = (state: RootState) => state.users.error;
 
 export const selectDishCountById = (state: RootState, dishId: string) =>
   state.cart[dishId] ?? 0;
 
 export const selectCartSummary = createSelector(
-  [selectCartState, selectDishState],
-  (cartState, dishesState) => {
+  [selectCartState, dishesSelectors.selectEntities],
+  (cartState, dishEntities) => {
     const items = Object.entries(cartState)
       .map(([dishId, quantity]) => {
-        const dish = dishesState.entities[dishId];
+        const dish = dishEntities[dishId];
 
         if (!dish || quantity <= 0) {
           return null;

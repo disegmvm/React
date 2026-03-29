@@ -1,13 +1,41 @@
+import { useEffect } from "react";
 import { NavLink, Navigate, Outlet, useParams } from "react-router";
-import { useAppSelector } from "../../redux/hooks";
-import { selectRestaurantById } from "../../redux/selectors";
+import { REQUEST_STATUS } from "../../constants/requestStatus";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import {
+  selectRestaurantById,
+  selectRestaurantRequestError,
+  selectRestaurantRequestStatus,
+} from "../../redux/selectors";
+import { fetchRestaurantById } from "../../redux/slices/restaurantsSlice";
 import styles from "./restaurantPage.module.css";
 
 export const RestaurantPage = () => {
   const { restaurantId = "" } = useParams();
+  const dispatch = useAppDispatch();
   const restaurant = useAppSelector((state) =>
     selectRestaurantById(state, restaurantId),
   );
+  const status = useAppSelector((state) =>
+    selectRestaurantRequestStatus(state, restaurantId),
+  );
+  const error = useAppSelector((state) =>
+    selectRestaurantRequestError(state, restaurantId),
+  );
+
+  useEffect(() => {
+    if (restaurantId) {
+      void dispatch(fetchRestaurantById(restaurantId));
+    }
+  }, [dispatch, restaurantId]);
+
+  if (status === REQUEST_STATUS.pending && !restaurant) {
+    return <div>Загружаем ресторан...</div>;
+  }
+
+  if (status === REQUEST_STATUS.failed && !restaurant) {
+    return <div>{error ?? "Не удалось загрузить ресторан"}</div>;
+  }
 
   if (!restaurant) {
     return <div>Ресторан не найден</div>;
@@ -17,6 +45,14 @@ export const RestaurantPage = () => {
     <div className={styles.restaurant}>
       <div className={styles.header}>
         <h2 className={styles.title}>{restaurant.name}</h2>
+        <p className={styles.description}>
+          {restaurant.description || "Описание ресторана пока отсутствует"}
+        </p>
+        <p className={styles.meta}>
+          Бренд: {restaurant.brand || "не указан"} | Тип:{" "}
+          {restaurant.type || "не указан"} | Максимальная громкость:{" "}
+          {restaurant.maxVolume || "не указана"}
+        </p>
 
         <div className={styles.sectionTabs}>
           <NavLink
@@ -39,7 +75,7 @@ export const RestaurantPage = () => {
         </div>
       </div>
 
-      <Outlet context={restaurant} />
+      <Outlet />
     </div>
   );
 };

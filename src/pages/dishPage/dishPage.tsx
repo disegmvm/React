@@ -1,7 +1,15 @@
+import { useEffect } from "react";
 import { Link, useParams } from "react-router";
 import { Counter } from "../../components/counter/counter";
+import { REQUEST_STATUS } from "../../constants/requestStatus";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { selectDishById, selectDishCountById } from "../../redux/selectors";
+import {
+  selectDishById,
+  selectDishCountById,
+  selectDishRequestError,
+  selectDishRequestStatus,
+} from "../../redux/selectors";
+import { fetchDishById } from "../../redux/slices/dishesSlice";
 import { decrementItem, incrementItem } from "../../redux/slices/cartSlice";
 import styles from "./dishPage.module.css";
 
@@ -10,6 +18,22 @@ export const DishPage = () => {
   const dispatch = useAppDispatch();
   const dish = useAppSelector((state) => selectDishById(state, dishId));
   const count = useAppSelector((state) => selectDishCountById(state, dishId));
+  const status = useAppSelector((state) => selectDishRequestStatus(state, dishId));
+  const error = useAppSelector((state) => selectDishRequestError(state, dishId));
+
+  useEffect(() => {
+    if (dishId) {
+      void dispatch(fetchDishById(dishId));
+    }
+  }, [dishId, dispatch]);
+
+  if (status === REQUEST_STATUS.pending && !dish) {
+    return <div>Загружаем блюдо...</div>;
+  }
+
+  if (status === REQUEST_STATUS.failed && !dish) {
+    return <div>{error ?? "Не удалось загрузить блюдо"}</div>;
+  }
 
   if (!dish) {
     return <div>Блюдо не найдено</div>;

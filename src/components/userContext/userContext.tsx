@@ -6,6 +6,7 @@ import {
 } from "react";
 
 type UserContextType = {
+  userId: string | null;
   userName: string | null;
   isAuthorized: boolean;
   login: () => void;
@@ -13,29 +14,33 @@ type UserContextType = {
 };
 
 const UserContext = createContext<UserContextType>({
+  userId: null,
   userName: null,
   isAuthorized: false,
   login: () => {},
   logout: () => {},
 });
 
-
 export const UserProvider = ({ children }: PropsWithChildren) => {
-  const [userName, setUserName] = useState<string | null>(null);
+  const [user, setUser] = useState<{ id: string; name: string } | null>(null);
 
   const login = () => {
-    setUserName("Денис");
+    setUser({
+      id: "user-den",
+      name: "Den",
+    });
   };
 
   const logout = () => {
-    setUserName(null);
+    setUser(null);
   };
 
   return (
     <UserContext.Provider
       value={{
-        userName,
-        isAuthorized: userName !== null,
+        userId: user?.id ?? null,
+        userName: user?.name ?? null,
+        isAuthorized: user !== null,
         login,
         logout,
       }}

@@ -9,6 +9,7 @@ const selectReviewState = (state: RootState) => state.reviews;
 const selectUserState = (state: RootState) => state.users;
 const selectRestaurantId = (_state: RootState, restaurantId: string) =>
   restaurantId;
+const selectDishId = (_state: RootState, dishId: string) => dishId;
 
 const getReviewView = (
   reviewId: string,
@@ -88,6 +89,27 @@ export const selectRestaurants = createSelector(
       .filter((restaurant): restaurant is RestaurantType => restaurant !== null),
 );
 
+export const selectRestaurantTabs = createSelector(
+  [selectRestaurantState],
+  (restaurantsState) =>
+    restaurantsState.ids
+      .map((restaurantId) => restaurantsState.entities[restaurantId])
+      .filter(
+        (
+          restaurant,
+        ): restaurant is {
+          id: string;
+          name: string;
+          menuIds: string[];
+          reviewIds: string[];
+        } => restaurant !== undefined,
+      )
+      .map((restaurant) => ({
+        id: restaurant.id,
+        name: restaurant.name,
+      })),
+);
+
 export const selectRestaurantById = createSelector(
   [
     selectRestaurantState,
@@ -109,6 +131,11 @@ export const selectRestaurantById = createSelector(
       reviews: reviewsState,
       users: usersState,
     }),
+);
+
+export const selectDishById = createSelector(
+  [selectDishState, selectDishId],
+  (dishesState, dishId) => getDishView(dishId, { dishes: dishesState }),
 );
 
 export const selectDishCountById = (state: RootState, dishId: string) =>

@@ -4,3 +4,8 @@
   background-color: var(--dish-bg);
   margin-bottom: 10px;
 }
+
+.link {
+  color: var(--text-color);
+  font-weight: 700;
+}

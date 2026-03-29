@@ -54,8 +54,31 @@
   border-bottom: 1px solid var(--surface-border);
 }
 
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .title {
   margin: 0;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.navLink {
+  color: var(--text-color);
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.activeNavLink {
+  opacity: 1;
+  font-weight: 700;
 }
 
 .actions {

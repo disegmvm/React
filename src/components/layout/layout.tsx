@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import type { PropsWithChildren } from "react";
+import { NavLink } from "react-router";
 import { Cart } from "../cart/cart";
 import { ScrollBar } from "../scrollBar/scrollBar";
 import { useTheme } from "../themeContext/themeContext";
@@ -20,7 +21,29 @@ export const Layout = ({ children }: PropsWithChildren) => {
       <ScrollBar />
 
       <header className={styles.header}>
-        <h1 className={styles.title}>Рестораны</h1>
+        <div className={styles.brand}>
+          <h1 className={styles.title}>Рестораны</h1>
+
+          <nav className={styles.nav}>
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) =>
+                isActive ? `${styles.navLink} ${styles.activeNavLink}` : styles.navLink
+              }
+            >
+              Home
+            </NavLink>
+            <NavLink
+              to="/restaurants"
+              className={({ isActive }) =>
+                isActive ? `${styles.navLink} ${styles.activeNavLink}` : styles.navLink
+              }
+            >
+              Restaurants
+            </NavLink>
+          </nav>
+        </div>
 
         <div className={styles.actions}>
           <button

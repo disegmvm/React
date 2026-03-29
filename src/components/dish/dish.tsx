@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Counter } from "../counter/counter";
 import type { DishType } from "../types";
 import styles from "./dish.module.css";
@@ -17,7 +18,12 @@ export const Dish = ({ dish }: DishProps) => {
 
   return (
     <li className={styles.dish}>
-      <p>Название: {dish.name}</p>
+      <p>
+        Название:{" "}
+        <Link to={`/dish/${dish.id}`} className={styles.link}>
+          {dish.name}
+        </Link>
+      </p>
       <p>Цена: {dish.price}</p>
 
       {dish.ingredients && dish.ingredients.length > 0 ? (

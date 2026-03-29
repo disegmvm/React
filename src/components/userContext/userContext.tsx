@@ -2,7 +2,7 @@ import {
   createContext,
   useContext,
   useState,
-  type ReactNode,
+  type PropsWithChildren,
 } from "react";
 
 type UserContextType = {
@@ -19,11 +19,8 @@ const UserContext = createContext<UserContextType>({
   logout: () => {},
 });
 
-type UserProviderProps = {
-  children: ReactNode;
-};
 
-export const UserProvider = ({ children }: UserProviderProps) => {
+export const UserProvider = ({ children }: PropsWithChildren) => {
   const [userName, setUserName] = useState<string | null>(null);
 
   const login = () => {

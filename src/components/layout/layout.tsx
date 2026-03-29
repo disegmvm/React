@@ -1,15 +1,13 @@
 import classNames from "classnames";
-import type { ReactNode } from "react";
+import type { PropsWithChildren } from "react";
+import { NavLink } from "react-router";
+import { Cart } from "../cart/cart";
 import { ScrollBar } from "../scrollBar/scrollBar";
 import { useTheme } from "../themeContext/themeContext";
 import { useUser } from "../userContext/userContext";
 import styles from "./layout.module.css";
 
-type LayoutProps = {
-  children: ReactNode;
-};
-
-export const Layout = ({ children }: LayoutProps) => {
+export const Layout = ({ children }: PropsWithChildren) => {
   const { theme, toggleTheme } = useTheme();
   const { userName, isAuthorized, login, logout } = useUser();
 
@@ -23,7 +21,29 @@ export const Layout = ({ children }: LayoutProps) => {
       <ScrollBar />
 
       <header className={styles.header}>
-        <h1 className={styles.title}>Рестораны</h1>
+        <div className={styles.brand}>
+          <h1 className={styles.title}>Рестораны</h1>
+
+          <nav className={styles.nav}>
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) =>
+                isActive ? `${styles.navLink} ${styles.activeNavLink}` : styles.navLink
+              }
+            >
+              Home
+            </NavLink>
+            <NavLink
+              to="/restaurants"
+              className={({ isActive }) =>
+                isActive ? `${styles.navLink} ${styles.activeNavLink}` : styles.navLink
+              }
+            >
+              Restaurants
+            </NavLink>
+          </nav>
+        </div>
 
         <div className={styles.actions}>
           <button
@@ -58,7 +78,12 @@ export const Layout = ({ children }: LayoutProps) => {
         </div>
       </header>
 
-      <main className={styles.main}>{children}</main>
+      <main className={styles.main}>
+        <div className={styles.content}>
+          <div className={styles.pageContent}>{children}</div>
+          <Cart />
+        </div>
+      </main>
 
       <footer className={styles.footer}>
         <p>Домашка по React</p>

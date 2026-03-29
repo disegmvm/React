@@ -54,8 +54,31 @@
   border-bottom: 1px solid var(--surface-border);
 }
 
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .title {
   margin: 0;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.navLink {
+  color: var(--text-color);
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.activeNavLink {
+  opacity: 1;
+  font-weight: 700;
 }
 
 .actions {
@@ -86,8 +109,25 @@
   padding: 24px 20px 40px;
 }
 
+.content {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.pageContent {
+  flex: 1;
+  min-width: 0;
+}
+
 .footer {
   padding: 20px;
   text-align: center;
   color: var(--text-color);
+}
+
+@media (max-width: 900px) {
+  .content {
+    flex-direction: column;
+  }
 }

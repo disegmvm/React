@@ -1,0 +1,35 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.backLink {
+  color: var(--text-color);
+}
+
+.card {
+  padding: 24px;
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(79, 109, 245, 0.12), transparent 45%),
+    var(--card-bg);
+  border: 1px solid var(--surface-border);
+}
+
+.label {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.title {
+  margin: 0 0 12px;
+}
+
+.price,
+.ingredients {
+  margin: 0 0 12px;
+}

@@ -2,7 +2,7 @@ import {
   createContext,
   useContext,
   useState,
-  type ReactNode,
+  type PropsWithChildren,
 } from "react";
 
 type Theme = "light" | "dark";
@@ -17,17 +17,11 @@ const ThemeContext = createContext<ThemeContextType>({
   toggleTheme: () => {},
 });
 
-type ThemeProviderProps = {
-  children: ReactNode;
-};
-
-export const ThemeProvider = ({ children }: ThemeProviderProps) => {
+export const ThemeProvider = ({ children }: PropsWithChildren) => {
   const [theme, setTheme] = useState<Theme>("light");
 
   const toggleTheme = () => {
-    setTheme((prevTheme) =>
-      prevTheme === "light" ? "dark" : "light",
-    );
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
   return (

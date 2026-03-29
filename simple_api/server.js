@@ -11,9 +11,9 @@ const mapRestaurantToClient = (restaurant) => ({
   id: restaurant.id,
   name: restaurant.name,
   description: restaurant.description,
-  brand: restaurant.brand,
-  type: restaurant.type,
-  maxVolume: restaurant.maxVolume,
+  cuisine: restaurant.cuisine,
+  format: restaurant.format,
+  averageCheck: restaurant.averageCheck,
 });
 
 const mapReviewToClient = (review) => ({

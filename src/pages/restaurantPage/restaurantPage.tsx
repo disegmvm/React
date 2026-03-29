@@ -49,9 +49,9 @@ export const RestaurantPage = () => {
           {restaurant.description || "Описание ресторана пока отсутствует"}
         </p>
         <p className={styles.meta}>
-          Бренд: {restaurant.brand || "не указан"} | Тип:{" "}
-          {restaurant.type || "не указан"} | Максимальная громкость:{" "}
-          {restaurant.maxVolume || "не указана"}
+          Кухня: {restaurant.cuisine || "не указана"} | Формат:{" "}
+          {restaurant.format || "не указан"} | Средний чек:{" "}
+          {restaurant.averageCheck || "не указан"}
         </p>
 
         <div className={styles.sectionTabs}>

@@ -34,9 +34,9 @@ export type RestaurantEntity = {
   id: string;
   name: string;
   description?: string;
-  brand?: string;
-  type?: string;
-  maxVolume?: string;
+  cuisine?: string;
+  format?: string;
+  averageCheck?: string;
 };
 
 export type RestaurantType = RestaurantEntity;

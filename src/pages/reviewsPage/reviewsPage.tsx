@@ -1,58 +1,51 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router";
+import {
+  useGetReviewsByRestaurantIdQuery,
+  useGetUsersQuery,
+} from "../../api/restaurantsApi";
 import { Review } from "../../components/review/review";
 import { ReviewForm } from "../../components/reviewForm/reviewForm";
 import { useUser } from "../../components/userContext/userContext";
-import { REQUEST_STATUS } from "../../constants/requestStatus";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  selectReviewsByRestaurantId,
-  selectReviewsRequestError,
-  selectReviewsRequestStatus,
-  selectUsersError,
-  selectUsersStatus,
-} from "../../redux/selectors";
-import { fetchReviewsByRestaurantId } from "../../redux/slices/reviewsSlice";
-import { fetchUsers } from "../../redux/slices/usersSlice";
 import styles from "./reviewsPage.module.css";
 
 export const ReviewsPage = () => {
   const { restaurantId = "" } = useParams();
-  const dispatch = useAppDispatch();
   const { userId } = useUser();
   const [editedReviewId, setEditedReviewId] = useState<string | null>(null);
-  const reviews = useAppSelector((state) =>
-    selectReviewsByRestaurantId(state, restaurantId),
+  const {
+    data: reviewsResponse = [],
+    isLoading: isReviewsLoading,
+    isError: isReviewsError,
+    error: reviewsError,
+  } = useGetReviewsByRestaurantIdQuery(restaurantId, {
+    skip: !restaurantId,
+  });
+  const {
+    data: users = [],
+    isLoading: isUsersLoading,
+    isError: isUsersError,
+    error: usersError,
+  } = useGetUsersQuery();
+  const reviews = useMemo(
+    () =>
+      reviewsResponse.map((review) => ({
+        ...review,
+        user: users.find((user) => user.id === review.userId)?.name ?? "Unknown user",
+      })),
+    [reviewsResponse, users],
   );
-  const reviewsStatus = useAppSelector((state) =>
-    selectReviewsRequestStatus(state, restaurantId),
-  );
-  const reviewsError = useAppSelector((state) =>
-    selectReviewsRequestError(state, restaurantId),
-  );
-  const usersStatus = useAppSelector(selectUsersStatus);
-  const usersError = useAppSelector(selectUsersError);
 
-  useEffect(() => {
-    if (restaurantId) {
-      void dispatch(fetchReviewsByRestaurantId({ restaurantId }));
-    }
-    void dispatch(fetchUsers());
-  }, [dispatch, restaurantId]);
-
-  if (
-    reviewsStatus === REQUEST_STATUS.pending ||
-    usersStatus === REQUEST_STATUS.pending
-  ) {
+  if (isReviewsLoading || isUsersLoading) {
     return <p>Загружаем отзывы...</p>;
   }
 
-  if (reviewsStatus === REQUEST_STATUS.failed) {
-    return <p>{reviewsError ?? "Не удалось загрузить отзывы"}</p>;
+  if (isReviewsError) {
+    return <p>{"status" in reviewsError ? "Не удалось загрузить отзывы" : reviewsError.message}</p>;
   }
 
-  if (usersStatus === REQUEST_STATUS.failed) {
-    return <p>{usersError ?? "Не удалось загрузить пользователей"}</p>;
+  if (isUsersError) {
+    return <p>{"status" in usersError ? "Не удалось загрузить пользователей" : usersError.message}</p>;
   }
 
   return (

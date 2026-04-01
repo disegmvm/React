@@ -1,40 +1,24 @@
-import { useEffect } from "react";
 import { NavLink, Navigate, Outlet, useParams } from "react-router";
-import { REQUEST_STATUS } from "../../constants/requestStatus";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  selectRestaurantById,
-  selectRestaurantRequestError,
-  selectRestaurantRequestStatus,
-} from "../../redux/selectors";
-import { fetchRestaurantById } from "../../redux/slices/restaurantsSlice";
+import { useGetRestaurantByIdQuery } from "../../api/restaurantsApi";
 import styles from "./restaurantPage.module.css";
 
 export const RestaurantPage = () => {
   const { restaurantId = "" } = useParams();
-  const dispatch = useAppDispatch();
-  const restaurant = useAppSelector((state) =>
-    selectRestaurantById(state, restaurantId),
-  );
-  const status = useAppSelector((state) =>
-    selectRestaurantRequestStatus(state, restaurantId),
-  );
-  const error = useAppSelector((state) =>
-    selectRestaurantRequestError(state, restaurantId),
-  );
+  const {
+    data: restaurant,
+    isLoading,
+    isError,
+    error,
+  } = useGetRestaurantByIdQuery(restaurantId, {
+    skip: !restaurantId,
+  });
 
-  useEffect(() => {
-    if (restaurantId) {
-      void dispatch(fetchRestaurantById(restaurantId));
-    }
-  }, [dispatch, restaurantId]);
-
-  if (status === REQUEST_STATUS.pending && !restaurant) {
+  if (isLoading && !restaurant) {
     return <div>Загружаем ресторан...</div>;
   }
 
-  if (status === REQUEST_STATUS.failed && !restaurant) {
-    return <div>{error ?? "Не удалось загрузить ресторан"}</div>;
+  if (isError && !restaurant) {
+    return <div>{"status" in error ? "Не удалось загрузить ресторан" : error.message}</div>;
   }
 
   if (!restaurant) {

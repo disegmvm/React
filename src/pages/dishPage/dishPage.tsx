@@ -1,38 +1,28 @@
-import { useEffect } from "react";
 import { Link, useParams } from "react-router";
+import { useGetDishByIdQuery } from "../../api/restaurantsApi";
 import { Counter } from "../../components/counter/counter";
-import { REQUEST_STATUS } from "../../constants/requestStatus";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  selectDishById,
-  selectDishCountById,
-  selectDishRequestError,
-  selectDishRequestStatus,
-} from "../../redux/selectors";
-import { fetchDishById } from "../../redux/slices/dishesSlice";
+import { selectDishCountById } from "../../redux/selectors";
 import { decrementItem, incrementItem } from "../../redux/slices/cartSlice";
 import styles from "./dishPage.module.css";
 
 export const DishPage = () => {
   const { dishId = "" } = useParams();
   const dispatch = useAppDispatch();
-  const dish = useAppSelector((state) => selectDishById(state, dishId));
   const count = useAppSelector((state) => selectDishCountById(state, dishId));
-  const status = useAppSelector((state) => selectDishRequestStatus(state, dishId));
-  const error = useAppSelector((state) => selectDishRequestError(state, dishId));
+  const {
+    data: dish,
+    isLoading,
+    isError,
+    error,
+  } = useGetDishByIdQuery(dishId, { skip: !dishId });
 
-  useEffect(() => {
-    if (dishId) {
-      void dispatch(fetchDishById(dishId));
-    }
-  }, [dishId, dispatch]);
-
-  if (status === REQUEST_STATUS.pending && !dish) {
+  if (isLoading && !dish) {
     return <div>Загружаем блюдо...</div>;
   }
 
-  if (status === REQUEST_STATUS.failed && !dish) {
-    return <div>{error ?? "Не удалось загрузить блюдо"}</div>;
+  if (isError && !dish) {
+    return <div>{"status" in error ? "Не удалось загрузить блюдо" : error.message}</div>;
   }
 
   if (!dish) {
@@ -55,7 +45,15 @@ export const DishPage = () => {
 
         <Counter
           value={count}
-          onIncrease={() => dispatch(incrementItem(dish.id))}
+          onIncrease={() =>
+            dispatch(
+              incrementItem({
+                id: dish.id,
+                name: dish.name,
+                price: dish.price,
+              }),
+            )
+          }
           onDecrease={() => dispatch(decrementItem(dish.id))}
           minValue={0}
           maxValue={5}

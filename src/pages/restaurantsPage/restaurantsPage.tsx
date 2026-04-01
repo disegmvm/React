@@ -1,31 +1,21 @@
-import { useEffect } from "react";
 import { NavLink, Navigate, Outlet } from "react-router";
-import { REQUEST_STATUS } from "../../constants/requestStatus";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  selectRestaurantTabs,
-  selectRestaurantsListError,
-  selectRestaurantsListStatus,
-} from "../../redux/selectors";
-import { fetchRestaurants } from "../../redux/slices/restaurantsSlice";
+import { useGetRestaurantsQuery } from "../../api/restaurantsApi";
 import styles from "./restaurantsPage.module.css";
 
 export const RestaurantsPage = () => {
-  const dispatch = useAppDispatch();
-  const restaurants = useAppSelector(selectRestaurantTabs);
-  const status = useAppSelector(selectRestaurantsListStatus);
-  const error = useAppSelector(selectRestaurantsListError);
+  const {
+    data: restaurants = [],
+    isLoading,
+    isError,
+    error,
+  } = useGetRestaurantsQuery();
 
-  useEffect(() => {
-    void dispatch(fetchRestaurants());
-  }, [dispatch]);
-
-  if (status === REQUEST_STATUS.pending) {
+  if (isLoading) {
     return <div>Загружаем рестораны...</div>;
   }
 
-  if (status === REQUEST_STATUS.failed) {
-    return <div>{error ?? "Не удалось загрузить рестораны"}</div>;
+  if (isError) {
+    return <div>{"status" in error ? "Не удалось загрузить рестораны" : error.message}</div>;
   }
 
   if (restaurants.length === 0) {
@@ -54,10 +44,9 @@ export const RestaurantsPage = () => {
 };
 
 export const RestaurantsIndexRedirect = () => {
-  const restaurants = useAppSelector(selectRestaurantTabs);
-  const status = useAppSelector(selectRestaurantsListStatus);
+  const { data: restaurants = [], isSuccess } = useGetRestaurantsQuery();
 
-  if (status !== REQUEST_STATUS.succeeded || restaurants.length === 0) {
+  if (!isSuccess || restaurants.length === 0) {
     return null;
   }
 

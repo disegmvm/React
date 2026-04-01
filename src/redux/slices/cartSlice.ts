@@ -1,7 +1,18 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-type CartState = {
-  [dishId: string]: number;
+type CartItem = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
+
+type CartState = Record<string, CartItem>;
+
+type AddCartItemPayload = {
+  id: string;
+  name: string;
+  price: number;
 };
 
 const initialState: CartState = {};
@@ -10,22 +21,36 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    incrementItem(state, action: PayloadAction<string>) {
-      const dishId = action.payload;
-      const currentCount = state[dishId] ?? 0;
+    incrementItem(state, action: PayloadAction<AddCartItemPayload>) {
+      const { id, name, price } = action.payload;
+      const currentItem = state[id];
 
-      state[dishId] = Math.min(currentCount + 1, 5);
+      if (!currentItem) {
+        state[id] = {
+          id,
+          name,
+          price,
+          quantity: 1,
+        };
+        return;
+      }
+
+      currentItem.quantity = Math.min(currentItem.quantity + 1, 5);
     },
     decrementItem(state, action: PayloadAction<string>) {
       const dishId = action.payload;
-      const currentCount = state[dishId] ?? 0;
+      const currentItem = state[dishId];
 
-      if (currentCount <= 1) {
+      if (!currentItem) {
+        return;
+      }
+
+      if (currentItem.quantity <= 1) {
         delete state[dishId];
         return;
       }
 
-      state[dishId] = currentCount - 1;
+      currentItem.quantity -= 1;
     },
   },
 });

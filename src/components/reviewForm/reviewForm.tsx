@@ -1,14 +1,11 @@
 import { useEffect, useReducer, type FormEvent } from "react";
+import {
+  useAddReviewMutation,
+  useUpdateReviewMutation,
+} from "../../api/restaurantsApi";
 import { Counter } from "../counter/counter";
 import styles from "./reviewForm.module.css";
 import { useUser } from "../userContext/userContext";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { addReview, updateReview } from "../../redux/slices/reviewsSlice";
-import {
-  selectReviewMutationError,
-  selectReviewMutationStatus,
-} from "../../redux/selectors";
-import { REQUEST_STATUS } from "../../constants/requestStatus";
 
 type ReviewFormState = {
   text: string;
@@ -72,9 +69,16 @@ export const ReviewForm = ({
     rating: initialRating,
   });
   const { isAuthorized, userId, userName } = useUser();
-  const reduxDispatch = useAppDispatch();
-  const mutationStatus = useAppSelector(selectReviewMutationStatus);
-  const mutationError = useAppSelector(selectReviewMutationError);
+  const [addReview, addReviewState] = useAddReviewMutation();
+  const [updateReview, updateReviewState] = useUpdateReviewMutation();
+  const isSubmitting = addReviewState.isLoading || updateReviewState.isLoading;
+  const mutationError =
+    ("error" in addReviewState && addReviewState.error && "status" in addReviewState.error
+      ? "Не удалось отправить отзыв"
+      : null) ??
+    ("error" in updateReviewState && updateReviewState.error && "status" in updateReviewState.error
+      ? "Не удалось обновить отзыв"
+      : null);
 
   useEffect(() => {
     dispatch({
@@ -99,24 +103,20 @@ export const ReviewForm = ({
 
     try {
       if (reviewId) {
-        await reduxDispatch(
-          updateReview({
-            reviewId,
-            restaurantId,
-            userId,
-            text: state.text.trim(),
-            rating: state.rating,
-          }),
-        ).unwrap();
+        await updateReview({
+          reviewId,
+          restaurantId,
+          userId,
+          text: state.text.trim(),
+          rating: state.rating,
+        }).unwrap();
       } else {
-        await reduxDispatch(
-          addReview({
-            restaurantId,
-            userId,
-            text: state.text.trim(),
-            rating: state.rating,
-          }),
-        ).unwrap();
+        await addReview({
+          restaurantId,
+          userId,
+          text: state.text.trim(),
+          rating: state.rating,
+        }).unwrap();
       }
 
       dispatch({
@@ -172,9 +172,9 @@ export const ReviewForm = ({
         <button
           type="submit"
           className={styles.clearButton}
-          disabled={mutationStatus === REQUEST_STATUS.pending}
+          disabled={isSubmitting}
         >
-          {mutationStatus === REQUEST_STATUS.pending ? "Сохраняем..." : submitLabel}
+          {isSubmitting ? "Сохраняем..." : submitLabel}
         </button>
 
         {onCancel ? (

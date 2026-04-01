@@ -15,6 +15,14 @@ export const Dish = ({ dish }: DishProps) => {
   const { isAuthorized } = useUser();
   const dispatch = useAppDispatch();
   const count = useAppSelector((state) => selectDishCountById(state, dish.id));
+  const handleIncrease = () =>
+    dispatch(
+      incrementItem({
+        id: dish.id,
+        name: dish.name,
+        price: dish.price,
+      }),
+    );
 
   return (
     <li className={styles.dish}>
@@ -35,7 +43,7 @@ export const Dish = ({ dish }: DishProps) => {
       {isAuthorized ? (
         <Counter
           value={count}
-          onIncrease={() => dispatch(incrementItem(dish.id))}
+          onIncrease={handleIncrease}
           onDecrease={() => dispatch(decrementItem(dish.id))}
           minValue={0}
           maxValue={5}

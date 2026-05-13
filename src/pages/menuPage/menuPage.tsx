@@ -1,9 +1,10 @@
+import type { FC } from "react";
 import { useParams } from "react-router";
 import { useGetDishesByRestaurantIdQuery } from "../../api/restaurantsApi";
 import { Dish } from "../../components/dish/dish";
 import styles from "./menuPage.module.css";
 
-export const MenuPage = () => {
+export const MenuPage: FC = () => {
   const { restaurantId = "" } = useParams();
   const {
     data: dishes = [],

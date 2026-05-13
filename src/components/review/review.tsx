@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 import type { ReviewType } from "../types";
 import styles from "./review.module.css";
 
@@ -7,7 +7,7 @@ type ReviewProps = {
   actionSlot?: ReactNode;
 };
 
-export const Review = ({ review, actionSlot }: ReviewProps) => {
+export const Review: FC<ReviewProps> = ({ review, actionSlot }) => {
   return (
     <li className={styles.review}>
       <div className={styles.header}>

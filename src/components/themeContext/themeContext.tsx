@@ -2,8 +2,8 @@ import {
   createContext,
   useContext,
   useState,
-  type PropsWithChildren,
   type FC,
+  type PropsWithChildren,
 } from "react";
 
 type Theme = "light" | "dark";
@@ -18,11 +18,10 @@ const ThemeContext = createContext<ThemeContextType>({
   toggleTheme: () => {},
 });
 
-export const ThemeProvider: FC<PropsWithChildren> = ( props ) => {
-  const { children } = props
+export const ThemeProvider: FC<PropsWithChildren> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>("light");
 
-  const toggleTheme = () => {
+  const toggleTheme: VoidFunction = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 

@@ -1,4 +1,4 @@
-import { useEffect, useReducer, type FormEvent } from "react";
+import { useEffect, useReducer, type FC, type FormEvent } from "react";
 import {
   useAddReviewMutation,
   useUpdateReviewMutation,
@@ -24,8 +24,8 @@ type ReviewFormProps = {
   initialText?: string;
   initialRating?: number;
   submitLabel?: string;
-  onSubmitted?: () => void;
-  onCancel?: () => void;
+  onSubmitted?: VoidFunction;
+  onCancel?: VoidFunction;
 };
 
 const reviewFormReducer = (
@@ -55,7 +55,7 @@ const reviewFormReducer = (
   }
 };
 
-export const ReviewForm = ({
+export const ReviewForm: FC<ReviewFormProps> = ({
   restaurantId,
   reviewId,
   initialText = "",

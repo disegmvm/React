@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type FC } from "react";
 import { useParams } from "react-router";
 import {
   useGetReviewsByRestaurantIdQuery,
@@ -9,7 +9,7 @@ import { ReviewForm } from "../../components/reviewForm/reviewForm";
 import { useUser } from "../../components/userContext/userContext";
 import styles from "./reviewsPage.module.css";
 
-export const ReviewsPage = () => {
+export const ReviewsPage: FC = () => {
   const { restaurantId = "" } = useParams();
   const { userId } = useUser();
   const [editedReviewId, setEditedReviewId] = useState<string | null>(null);

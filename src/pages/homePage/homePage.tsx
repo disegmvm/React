@@ -1,7 +1,8 @@
+import type { FC } from "react";
 import { Link } from "react-router";
 import styles from "./homePage.module.css";
 
-export const HomePage = () => {
+export const HomePage: FC = () => {
   return (
     <section className={styles.hero}>
       <p className={styles.eyebrow}>Учебный проект на React</p>

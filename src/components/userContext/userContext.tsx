@@ -2,6 +2,7 @@ import {
   createContext,
   useContext,
   useState,
+  type FC,
   type PropsWithChildren,
 } from "react";
 
@@ -14,9 +15,9 @@ type UserContextType = {
 };
 
 type User = {
-id: string;
-name: string
-}
+  id: string;
+  name: string;
+};
 
 const UserContext = createContext<UserContextType>({
   userId: null,
@@ -26,17 +27,17 @@ const UserContext = createContext<UserContextType>({
   logout: () => {},
 });
 
-export const UserProvider = ({ children }: PropsWithChildren) => {
+export const UserProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const login = () => {
+  const login: VoidFunction = () => {
     setUser({
       id: "user-den",
       name: "Den",
     });
   };
 
-  const logout = () => {
+  const logout: VoidFunction = () => {
     setUser(null);
   };
 

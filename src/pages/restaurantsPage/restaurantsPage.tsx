@@ -1,8 +1,9 @@
+import type { FC } from "react";
 import { NavLink, Navigate, Outlet } from "react-router";
 import { useGetRestaurantsQuery } from "../../api/restaurantsApi";
 import styles from "./restaurantsPage.module.css";
 
-export const RestaurantsPage = () => {
+export const RestaurantsPage: FC = () => {
   const {
     data: restaurants = [],
     isLoading,
@@ -43,7 +44,7 @@ export const RestaurantsPage = () => {
   );
 };
 
-export const RestaurantsIndexRedirect = () => {
+export const RestaurantsIndexRedirect: FC = () => {
   const { data: restaurants = [], isSuccess } = useGetRestaurantsQuery();
 
   if (!isSuccess || restaurants.length === 0) {

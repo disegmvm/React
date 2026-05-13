@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import type { PropsWithChildren } from "react";
+import type { FC, PropsWithChildren } from "react";
 import { NavLink } from "react-router";
 import { Cart } from "../cart/cart";
 import { ScrollBar } from "../scrollBar/scrollBar";
@@ -7,7 +7,7 @@ import { useTheme } from "../themeContext/themeContext";
 import { useUser } from "../userContext/userContext";
 import styles from "./layout.module.css";
 
-export const Layout = ({ children }: PropsWithChildren) => {
+export const Layout: FC<PropsWithChildren> = ({ children }) => {
   const { theme, toggleTheme } = useTheme();
   const { userName, isAuthorized, login, logout } = useUser();
 

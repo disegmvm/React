@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FC } from "react";
 import styles from "./scrollBar.module.css";
 
-export const ScrollBar = () => {
+export const ScrollBar: FC = () => {
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll: VoidFunction = () => {
       const pageHeight = document.body.scrollHeight - window.innerHeight;
       const currentScroll = window.scrollY;
       const result = (currentScroll / pageHeight) * 100;

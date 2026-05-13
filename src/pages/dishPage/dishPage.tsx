@@ -1,3 +1,4 @@
+import type { FC } from "react";
 import { Link, useParams } from "react-router";
 import { useGetDishByIdQuery } from "../../api/restaurantsApi";
 import { Counter } from "../../components/counter/counter";
@@ -6,7 +7,7 @@ import { selectDishCountById } from "../../redux/selectors";
 import { decrementItem, incrementItem } from "../../redux/slices/cartSlice";
 import styles from "./dishPage.module.css";
 
-export const DishPage = () => {
+export const DishPage: FC = () => {
   const { dishId = "" } = useParams();
   const dispatch = useAppDispatch();
   const count = useAppSelector((state) => selectDishCountById(state, dishId));

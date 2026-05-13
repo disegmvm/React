@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { Provider } from "react-redux";
+import type { FC } from "react";
 import { store } from "../../redux/store";
 import { Layout } from "../layout/layout";
 import { NotFound } from "../notFound/notFound";
@@ -13,7 +14,7 @@ import { RestaurantsIndexRedirect, RestaurantsPage } from "../../pages/restauran
 import { ReviewsPage } from "../../pages/reviewsPage/reviewsPage";
 import styles from "./app.module.css";
 
-export const App = () => (
+export const App: FC = () => (
   <Provider store={store}>
     <ThemeProvider>
       <UserProvider>

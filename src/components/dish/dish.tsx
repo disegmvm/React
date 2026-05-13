@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import type { FC } from "react";
 import { Counter } from "../counter/counter";
 import type { DishType } from "../types";
 import styles from "./dish.module.css";
@@ -11,11 +12,11 @@ type DishProps = {
   dish: DishType;
 };
 
-export const Dish = ({ dish }: DishProps) => {
+export const Dish: FC<DishProps> = ({ dish }) => {
   const { isAuthorized } = useUser();
   const dispatch = useAppDispatch();
   const count = useAppSelector((state) => selectDishCountById(state, dish.id));
-  const handleIncrease = () =>
+  const handleIncrease: VoidFunction = () =>
     dispatch(
       incrementItem({
         id: dish.id,

@@ -1,8 +1,9 @@
+import type { FC } from "react";
 import { NavLink, Navigate, Outlet, useParams } from "react-router";
 import { useGetRestaurantByIdQuery } from "../../api/restaurantsApi";
 import styles from "./restaurantPage.module.css";
 
-export const RestaurantPage = () => {
+export const RestaurantPage: FC = () => {
   const { restaurantId = "" } = useParams();
   const {
     data: restaurant,
@@ -64,7 +65,7 @@ export const RestaurantPage = () => {
   );
 };
 
-export const RestaurantIndexRedirect = () => {
+export const RestaurantIndexRedirect: FC = () => {
   const { restaurantId = "" } = useParams();
 
   return <Navigate to={`/restaurants/${restaurantId}/menu`} replace />;

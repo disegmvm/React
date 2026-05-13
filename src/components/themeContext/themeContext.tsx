@@ -3,13 +3,14 @@ import {
   useContext,
   useState,
   type PropsWithChildren,
+  type FC,
 } from "react";
 
 type Theme = "light" | "dark";
 
 type ThemeContextType = {
   theme: Theme;
-  toggleTheme: () => void;
+  toggleTheme: VoidFunction;
 };
 
 const ThemeContext = createContext<ThemeContextType>({
@@ -17,7 +18,8 @@ const ThemeContext = createContext<ThemeContextType>({
   toggleTheme: () => {},
 });
 
-export const ThemeProvider = ({ children }: PropsWithChildren) => {
+export const ThemeProvider: FC<PropsWithChildren> = ( props ) => {
+  const { children } = props
   const [theme, setTheme] = useState<Theme>("light");
 
   const toggleTheme = () => {

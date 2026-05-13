@@ -9,9 +9,14 @@ type UserContextType = {
   userId: string | null;
   userName: string | null;
   isAuthorized: boolean;
-  login: () => void;
-  logout: () => void;
+  login: VoidFunction;
+  logout: VoidFunction;
 };
+
+type User = {
+id: string;
+name: string
+}
 
 const UserContext = createContext<UserContextType>({
   userId: null,
@@ -22,7 +27,7 @@ const UserContext = createContext<UserContextType>({
 });
 
 export const UserProvider = ({ children }: PropsWithChildren) => {
-  const [user, setUser] = useState<{ id: string; name: string } | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const login = () => {
     setUser({

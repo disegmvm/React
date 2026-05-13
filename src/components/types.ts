@@ -1,9 +1,4 @@
-export type EntityMap<T> = Record<string, T>;
-
-export type NormalizedState<T> = {
-  ids: string[];
-  entities: EntityMap<T>;
-};
+export type RequestStatus = "idle" | "pending" | "succeeded" | "failed";
 
 export type UserType = {
   id: string;
@@ -17,11 +12,8 @@ export type ReviewEntity = {
   rating: number;
 };
 
-export type ReviewType = {
-  id: string;
+export type ReviewType = ReviewEntity & {
   user: string;
-  text: string;
-  rating: number;
 };
 
 export type DishEntity = {
@@ -41,13 +33,10 @@ export type DishType = {
 export type RestaurantEntity = {
   id: string;
   name: string;
-  menuIds: string[];
-  reviewIds: string[];
+  description?: string;
+  cuisine?: string;
+  format?: string;
+  averageCheck?: string;
 };
 
-export type RestaurantType = {
-  id: string;
-  name: string;
-  menu: DishType[];
-  reviews: ReviewType[];
-};
+export type RestaurantType = RestaurantEntity;

@@ -1,15 +1,16 @@
 import classNames from "classnames";
+import type { FC } from "react";
 import styles from "./counter.module.css";
 
 type CounterProps = {
   value: number;
-  onIncrease: () => void;
-  onDecrease: () => void;
+  onIncrease: VoidFunction;
+  onDecrease: VoidFunction;
   minValue: number;
   maxValue: number;
 };
 
-export const Counter = ({
+export const Counter: FC<CounterProps> = ({
   value,
   onIncrease,
   onDecrease,

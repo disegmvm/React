@@ -3,3 +3,16 @@
   padding: 0;
   list-style: none;
 }
+
+.item {
+  margin-bottom: 12px;
+}
+
+.editButton {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  cursor: pointer;
+}

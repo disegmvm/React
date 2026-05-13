@@ -1,15 +1,30 @@
+import type { FC } from "react";
 import { Link, useParams } from "react-router";
+import { useGetDishByIdQuery } from "../../api/restaurantsApi";
 import { Counter } from "../../components/counter/counter";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { selectDishById, selectDishCountById } from "../../redux/selectors";
+import { selectDishCountById } from "../../redux/selectors";
 import { decrementItem, incrementItem } from "../../redux/slices/cartSlice";
 import styles from "./dishPage.module.css";
 
-export const DishPage = () => {
+export const DishPage: FC = () => {
   const { dishId = "" } = useParams();
   const dispatch = useAppDispatch();
-  const dish = useAppSelector((state) => selectDishById(state, dishId));
   const count = useAppSelector((state) => selectDishCountById(state, dishId));
+  const {
+    data: dish,
+    isLoading,
+    isError,
+    error,
+  } = useGetDishByIdQuery(dishId, { skip: !dishId });
+
+  if (isLoading && !dish) {
+    return <div>Загружаем блюдо...</div>;
+  }
+
+  if (isError && !dish) {
+    return <div>{"status" in error ? "Не удалось загрузить блюдо" : error.message}</div>;
+  }
 
   if (!dish) {
     return <div>Блюдо не найдено</div>;
@@ -31,7 +46,15 @@ export const DishPage = () => {
 
         <Counter
           value={count}
-          onIncrease={() => dispatch(incrementItem(dish.id))}
+          onIncrease={() =>
+            dispatch(
+              incrementItem({
+                id: dish.id,
+                name: dish.name,
+                price: dish.price,
+              }),
+            )
+          }
           onDecrease={() => dispatch(decrementItem(dish.id))}
           minValue={0}
           maxValue={5}

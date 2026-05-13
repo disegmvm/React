@@ -1,10 +1,23 @@
+import type { FC } from "react";
 import { NavLink, Navigate, Outlet } from "react-router";
-import { useAppSelector } from "../../redux/hooks";
-import { selectRestaurantTabs } from "../../redux/selectors";
+import { useGetRestaurantsQuery } from "../../api/restaurantsApi";
 import styles from "./restaurantsPage.module.css";
 
-export const RestaurantsPage = () => {
-  const restaurants = useAppSelector(selectRestaurantTabs);
+export const RestaurantsPage: FC = () => {
+  const {
+    data: restaurants = [],
+    isLoading,
+    isError,
+    error,
+  } = useGetRestaurantsQuery();
+
+  if (isLoading) {
+    return <div>Загружаем рестораны...</div>;
+  }
+
+  if (isError) {
+    return <div>{"status" in error ? "Не удалось загрузить рестораны" : error.message}</div>;
+  }
 
   if (restaurants.length === 0) {
     return <div>Рестораны не найдены</div>;
@@ -31,11 +44,11 @@ export const RestaurantsPage = () => {
   );
 };
 
-export const RestaurantsIndexRedirect = () => {
-  const restaurants = useAppSelector(selectRestaurantTabs);
+export const RestaurantsIndexRedirect: FC = () => {
+  const { data: restaurants = [], isSuccess } = useGetRestaurantsQuery();
 
-  if (restaurants.length === 0) {
-    return <div>Рестораны не найдены</div>;
+  if (!isSuccess || restaurants.length === 0) {
+    return null;
   }
 
   return <Navigate to={`/restaurants/${restaurants[0].id}/menu`} replace />;

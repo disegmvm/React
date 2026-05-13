@@ -35,3 +35,21 @@
   color: var(--button-text);
   cursor: pointer;
 }
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.secondaryButton {
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  background-color: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.error {
+  color: #d14141;
+}

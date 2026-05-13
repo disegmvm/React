@@ -1,8 +1,9 @@
+import type { FC } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { selectCartSummary } from "../../redux/selectors";
 import styles from "./cart.module.css";
 
-export const Cart = () => {
+export const Cart: FC = () => {
   const cart = useAppSelector(selectCartSummary);
 
   return (

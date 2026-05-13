@@ -16,6 +16,11 @@
   margin: 0;
 }
 
+.description,
+.meta {
+  margin: 0;
+}
+
 .sectionTabs {
   display: flex;
   flex-wrap: wrap;
